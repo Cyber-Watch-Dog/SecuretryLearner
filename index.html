@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bug Bounty Azure Checklist</title>
+  <title>Bug Bounty Azure Checklist with Commands</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -33,12 +33,12 @@
       margin: 0.5rem 0;
       cursor: pointer;
     }
-    input[type="checkbox"] {
-      margin-right: 0.75rem;
-      transform: scale(1.2);
-    }
-    label:hover {
-      color: #00ffae;
+    code {
+      background: #222;
+      color: #00e1ff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.95rem;
     }
     footer {
       text-align: center;
@@ -49,49 +49,49 @@
   </style>
 </head>
 <body>
-  <h1>Mercedes-Benz Azure Bug Bounty Checklist</h1>
+  <h1>Mercedes-Benz Azure Bug Bounty Checklist + Commands</h1>
 
   <div class="section">
     <h2>Recon & Enumeration</h2>
-    <label><input type="checkbox"> Subdomain Enumeration (subfinder, amass)</label>
-    <label><input type="checkbox"> Live Host Discovery (httpx)</label>
-    <label><input type="checkbox"> Port Scanning (naabu, nmap)</label>
-    <label><input type="checkbox"> Historical URLs (gau, waybackurls)</label>
-    <label><input type="checkbox"> Parameter Discovery (arjun, paramspider)</label>
+    <label><input type="checkbox"> Subdomain Enumeration — <code>subfinder -d target.com -o subs.txt</code></label>
+    <label><input type="checkbox"> Live Host Discovery — <code>httpx -l subs.txt -o live.txt</code></label>
+    <label><input type="checkbox"> Port Scanning — <code>naabu -l live.txt -o ports.txt</code></label>
+    <label><input type="checkbox"> Historical URLs — <code>cat subs.txt | gau > urls.txt</code></label>
+    <label><input type="checkbox"> Parameter Discovery — <code>arjun -i urls.txt -o params.txt</code></label>
   </div>
 
   <div class="section">
     <h2>Web App Vulnerabilities</h2>
-    <label><input type="checkbox"> Test for XSS (dalfox, kxss)</label>
-    <label><input type="checkbox"> Check for IDOR</label>
-    <label><input type="checkbox"> SSRF Injection</label>
-    <label><input type="checkbox"> Open Redirects</label>
-    <label><input type="checkbox"> SQLi, RCE, Path Traversal</label>
+    <label><input type="checkbox"> XSS Testing — <code>dalfox file urls.txt</code></label>
+    <label><input type="checkbox"> IDOR Checks — <code>Manual/BurpSuite testing</code></label>
+    <label><input type="checkbox"> SSRF Testing — <code>gf ssrf urls.txt</code></label>
+    <label><input type="checkbox"> Open Redirects — <code>gf redirect urls.txt</code></label>
+    <label><input type="checkbox"> Path Traversal — <code>ffuf -w wordlist.txt -u https://site.com/FUZZ</code></label>
   </div>
 
   <div class="section">
     <h2>Azure-Specific Tests</h2>
-    <label><input type="checkbox"> Check Azure Blob Storage for open access</label>
-    <label><input type="checkbox"> Analyze Azure App Services (*.azurewebsites.net)</label>
-    <label><input type="checkbox"> Test Azure Functions APIs</label>
-    <label><input type="checkbox"> SSRF to Metadata Service (169.254.169.254)</label>
+    <label><input type="checkbox"> Azure Blob Storage Access — <code>azcopy list https://example.blob.core.windows.net/container</code></label>
+    <label><input type="checkbox"> Azure App Services — <code>Visit *.azurewebsites.net and *.scm.azurewebsites.net</code></label>
+    <label><input type="checkbox"> Azure Function API Check — <code>curl -X GET https://func.azurewebsites.net/api/test</code></label>
+    <label><input type="checkbox"> Azure SSRF Metadata — <code>curl -H "Metadata:true" http://169.254.169.254/metadata/instance?api-version=2021-02-01</code></label>
   </div>
 
   <div class="section">
     <h2>Authentication & Tokens</h2>
-    <label><input type="checkbox"> Test login flows and JWTs</label>
-    <label><input type="checkbox"> Session fixation/timeout checks</label>
-    <label><input type="checkbox"> Shared cookies across subdomains</label>
+    <label><input type="checkbox"> JWT Manipulation — <code>jwt_tool token.jwt</code></label>
+    <label><input type="checkbox"> Session Checks — <code>Manual session testing (timeout, token reuse)</code></label>
+    <label><input type="checkbox"> Cookie Scope — <code>Check Burp → Proxy → Cookies</code></label>
   </div>
 
   <div class="section">
     <h2>Lateral Movement</h2>
-    <label><input type="checkbox"> Low-impact to high-impact chaining</label>
-    <label><input type="checkbox"> Cross-subdomain token reuse</label>
+    <label><input type="checkbox"> Pivot via Low-Severity Issue — <code>Map flow using Burp history</code></label>
+    <label><input type="checkbox"> Cross-domain Auth Abuse — <code>Replay tokens across *.mbos.* and *.azure.*</code></label>
   </div>
 
   <footer>
-    Built for Azure Recon Hunters 🚀
+    Built for Advanced Bug Bounty Recon 🔍
   </footer>
 </body>
 </html>
